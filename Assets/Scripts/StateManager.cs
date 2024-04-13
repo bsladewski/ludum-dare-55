@@ -5,6 +5,9 @@ public class StateManager : MonoBehaviour
     public static StateManager Instance { get; private set; }
 
     [SerializeField]
+    private GameStartPrompt gameStartPrompt;
+
+    [SerializeField]
     private WaveSettingsSO[] waveSettings;
 
     [SerializeField]
@@ -32,24 +35,17 @@ public class StateManager : MonoBehaviour
 
     private void Start()
     {
+        gameStartPrompt.gameObject.SetActive(true);
         GameStartPrompt.Instance.OnGameStarted += GameStartPrompt_OnGameStarted;
+        WaveCountdownVisual.Instance.OnCountdownEnded += WaveCountdown_OnCountdownEnded;
     }
 
     private void Update()
     {
         switch (gameState)
         {
-            case GameState.WaveCountdown:
-                HandleWaveCountdown();
-                break;
             case GameState.WaveInProgress:
                 HandleWaveInProgress();
-                break;
-            case GameState.BossRound:
-                HandleBossRound();
-                break;
-            case GameState.GameOver:
-                HandleGameOver();
                 break;
             default:
                 break;
@@ -76,40 +72,43 @@ public class StateManager : MonoBehaviour
 
     private void InitWaveCountdown()
     {
-        Debug.Log("Init wave countdown.");
+        WaveCountdownVisual.Instance.Initialize(currentWave, false);
     }
 
-    private void HandleWaveCountdown()
+    private void WaveCountdown_OnCountdownEnded()
     {
-
+        InitWaveInProgress();
+        gameState = GameState.WaveInProgress;
     }
 
     private void InitWaveInProgress()
     {
         waveTimer = waveDuration;
+        WaveTimer.Instance.UpdateTimer(waveTimer);
+        WaveTimer.Instance.Enable();
     }
 
     private void HandleWaveInProgress()
     {
-
+        waveTimer -= Time.deltaTime;
+        if (waveTimer < 0f)
+        {
+            WaveTimer.Instance.Disable();
+            InitBossRound();
+            gameState = GameState.BossRound;
+        }
+        else
+        {
+            WaveTimer.Instance.UpdateTimer(waveTimer);
+        }
     }
 
     private void InitBossRound()
     {
-
-    }
-
-    private void HandleBossRound()
-    {
-
+        Debug.Log("Boss round!");
     }
 
     private void InitGameOver()
-    {
-
-    }
-
-    private void HandleGameOver()
     {
 
     }
