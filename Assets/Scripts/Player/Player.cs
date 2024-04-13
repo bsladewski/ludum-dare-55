@@ -7,6 +7,14 @@ public class Player : MonoBehaviour
     public static Action<int> OnSolutionEntered;
 
     [SerializeField]
+    private int maxHealth = 3;
+
+    private int currentHealth;
+
+    [SerializeField]
+    private PlayerHealth playerHealth;
+
+    [SerializeField]
     private TextMeshProUGUI solutionText;
 
     private PlayerControls playerControls;
@@ -35,6 +43,11 @@ public class Player : MonoBehaviour
     private void Start()
     {
         UpdateSolution();
+        Enemy.OnEnemyAttackPlayer += Enemy_OnEnemyAttackPlayer;
+        StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
+
+        currentHealth = maxHealth;
+        playerHealth.UpdateHealth(maxHealth, currentHealth);
     }
 
     private void OnEnable()
@@ -95,5 +108,25 @@ public class Player : MonoBehaviour
 
         solutionText.gameObject.SetActive(true);
         solutionText.text = solution.ToString();
+    }
+
+    private void Enemy_OnEnemyAttackPlayer()
+    {
+        currentHealth -= 1;
+        playerHealth.UpdateHealth(maxHealth, currentHealth);
+    }
+
+    private void StateManager_OnGameStateChanged(StateManager.GameState gameState)
+    {
+        switch (gameState)
+        {
+            case StateManager.GameState.WaveInProgress:
+            case StateManager.GameState.BossRound:
+                playerHealth.gameObject.SetActive(true);
+                break;
+            default:
+                playerHealth.gameObject.SetActive(false);
+                break;
+        }
     }
 }

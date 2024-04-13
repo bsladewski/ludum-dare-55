@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour
 {
     public static StateManager Instance { get; private set; }
+
+    public Action<GameState> OnGameStateChanged;
 
     [SerializeField]
     private GameStartPrompt gameStartPrompt;
@@ -78,7 +81,7 @@ public class StateManager : MonoBehaviour
     private void WaveCountdown_OnCountdownEnded()
     {
         InitWaveInProgress();
-        gameState = GameState.WaveInProgress;
+        SetGameState(GameState.WaveInProgress);
     }
 
     private void InitWaveInProgress()
@@ -95,7 +98,7 @@ public class StateManager : MonoBehaviour
         {
             WaveTimer.Instance.Disable();
             InitBossRound();
-            gameState = GameState.BossRound;
+            SetGameState(GameState.BossRound);
         }
         else
         {
@@ -116,7 +119,13 @@ public class StateManager : MonoBehaviour
     private void GameStartPrompt_OnGameStarted()
     {
         InitWaveCountdown();
-        gameState = GameState.WaveCountdown;
+        SetGameState(GameState.WaveCountdown);
+    }
+
+    private void SetGameState(GameState gameState)
+    {
+        this.gameState = gameState;
+        OnGameStateChanged?.Invoke(gameState);
     }
 
     public enum GameState
