@@ -1,8 +1,17 @@
 using UnityEngine;
+using TMPro;
+using System;
 
 public class Player : MonoBehaviour
 {
+    public static Action<int> OnSolutionEntered;
+
+    [SerializeField]
+    private TextMeshProUGUI solutionText;
+
     private PlayerControls playerControls;
+
+    private int solution = 0;
 
     private void Awake()
     {
@@ -23,23 +32,68 @@ public class Player : MonoBehaviour
         playerControls.Player.Backspace.started += (_) => OnBackspacePressed();
     }
 
+    private void Start()
+    {
+        UpdateSolution();
+    }
+
     private void OnEnable()
     {
         playerControls.Enable();
     }
 
+    private bool PlayerInputAllowed()
+    {
+        StateManager.GameState gameState = StateManager.Instance.GetGameState();
+        return gameState == StateManager.GameState.WaveInProgress ||
+               gameState == StateManager.GameState.BossRound;
+    }
+
     private void OnNumberInput(int number)
     {
-        Debug.Log(number);
+        if (!PlayerInputAllowed()) return;
+
+        int newSolution = solution * 10 + number;
+        if (newSolution > 999)
+        {
+            Debug.Log("Solution too large!");
+            return;
+        }
+
+        solution = newSolution;
+        UpdateSolution();
     }
 
     private void OnEnterPressed()
     {
-        Debug.Log("Enter pressed.");
+        if (!PlayerInputAllowed()) return;
+
+        if (solution > 0)
+        {
+            OnSolutionEntered?.Invoke(solution);
+        }
+
+        solution = 0;
+        UpdateSolution();
     }
 
     private void OnBackspacePressed()
     {
-        Debug.Log("Backspace pressed.");
+        if (!PlayerInputAllowed()) return;
+
+        solution /= 10;
+        UpdateSolution();
+    }
+
+    private void UpdateSolution()
+    {
+        if (solution == 0)
+        {
+            solutionText.gameObject.SetActive(false);
+            return;
+        }
+
+        solutionText.gameObject.SetActive(true);
+        solutionText.text = solution.ToString();
     }
 }
