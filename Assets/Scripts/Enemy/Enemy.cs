@@ -32,6 +32,12 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        StateManager.GameState gameState = StateManager.Instance.GetGameState();
+        if (gameState != StateManager.GameState.WaveInProgress && gameState != StateManager.GameState.BossRound)
+        {
+            return;
+        }
+
         if (Vector3.Distance(transform.position, target) > 1.5f && !isInGracePeriod)
         {
             Vector3 moveDir = (target - transform.position).normalized;

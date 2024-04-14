@@ -9,10 +9,15 @@ public class WaveTimer : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("Singelton WaveTimer already instantiated!");
+            Debug.LogError("Singleton WaveTimer already instantiated!");
         }
 
         Instance = this;
+    }
+
+    private void Start()
+    {
+        StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
         Player.OnSolutionEntered += Player_OnSolutionEntered;
     }
 
@@ -40,6 +45,14 @@ public class WaveTimer : MonoBehaviour
     public void UpdateTimer(float timeRemaining)
     {
         timerText.text = Mathf.Ceil(timeRemaining).ToString();
+    }
+
+    private void StateManager_OnGameStateChanged(StateManager.GameState gameState)
+    {
+        if (gameState != StateManager.GameState.WaveInProgress)
+        {
+            Disable();
+        }
     }
 
     private void Player_OnSolutionEntered(int solution)

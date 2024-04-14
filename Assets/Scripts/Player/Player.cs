@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
-    public static Action OnPlayerDeath;
+    public Action OnPlayerDeath;
 
     public static Action<int> OnSolutionEntered;
 

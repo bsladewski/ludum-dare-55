@@ -41,6 +41,7 @@ public class StateManager : MonoBehaviour
         gameStartPrompt.gameObject.SetActive(true);
         GameStartPrompt.Instance.OnGameStarted += GameStartPrompt_OnGameStarted;
         WaveCountdownVisual.Instance.OnCountdownEnded += WaveCountdown_OnCountdownEnded;
+        Player.Instance.OnPlayerDeath += Player_OnPlayerDeath;
     }
 
     private void Update()
@@ -97,7 +98,6 @@ public class StateManager : MonoBehaviour
         waveTimer -= Time.deltaTime;
         if (waveTimer < 0f)
         {
-            WaveTimer.Instance.Disable();
             InitBossRound();
             SetGameState(GameState.BossRound);
         }
@@ -114,7 +114,13 @@ public class StateManager : MonoBehaviour
 
     private void InitGameOver()
     {
+        Debug.Log("Game Over!");
+    }
 
+    private void Player_OnPlayerDeath()
+    {
+        InitGameOver();
+        SetGameState(GameState.GameOver);
     }
 
     private void GameStartPrompt_OnGameStarted()
