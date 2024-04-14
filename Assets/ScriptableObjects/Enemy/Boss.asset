@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTerms: 4
   maxSum: 200
-  pointValue: 10
+  pointValue: 32
   moveSpeed: 1
   stopDistance: 3
   enemyPrefab: {fileID: 618600309771054344, guid: e642bd62ef9af7a4d9d2036f7a0b38a1,
