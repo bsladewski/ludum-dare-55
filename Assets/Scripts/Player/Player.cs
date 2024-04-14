@@ -197,6 +197,7 @@ public class Player : MonoBehaviour
 
     public void HitPlayer()
     {
+        CameraShakeManager.Instance.Shake(2.5f, 0.5f);
         Instantiate(playerHitEffectPrefab, transform.position, Quaternion.identity);
         currentHealth -= 1;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
@@ -233,5 +234,6 @@ public class Player : MonoBehaviour
             lightningSpawnPoint.position,
             enemy.transform.position + Vector3.up
         );
+        CameraShakeManager.Instance.Shake(1.5f, 0.5f);
     }
 }
