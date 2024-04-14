@@ -17,11 +17,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float spawnRadius = 10f;
 
+    [SerializeField]
+    private float spawnFuzzFactor = 2f;
+
     private static readonly float SPAWN_TIMER_GRACE_PERIOD = 2f;
 
     private float spawnTimer = SPAWN_TIMER_GRACE_PERIOD;
-
-    private float pointDeficit = 0f;
 
     private void Start()
     {
@@ -71,7 +72,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(Enemy enemyPrefab)
     {
-        Vector2 spawnPoint = Random.insideUnitCircle.normalized * spawnRadius;
+        float spawnDistance = spawnRadius + (Random.value * spawnFuzzFactor);
+        Vector2 spawnPoint = Random.insideUnitCircle.normalized * spawnDistance;
         Instantiate(enemyPrefab, new Vector3(spawnPoint.x, 0f, spawnPoint.y), Quaternion.identity);
     }
 }

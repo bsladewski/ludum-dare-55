@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using TMPro;
 
 public class StateManager : MonoBehaviour
 {
@@ -23,7 +24,10 @@ public class StateManager : MonoBehaviour
     private float endGameDifficultyRamp = 1f;
 
     [SerializeField]
-    private float waveDuration = 120f;
+    private float waveDuration = 60f;
+
+    [SerializeField]
+    private TextMeshProUGUI bossRoundText;
 
     private float waveTimer;
 
@@ -45,6 +49,7 @@ public class StateManager : MonoBehaviour
         GameStartPrompt.Instance.OnGameStarted += GameStartPrompt_OnGameStarted;
         WaveCountdownVisual.Instance.OnCountdownEnded += WaveCountdown_OnCountdownEnded;
         Player.Instance.OnPlayerDeath += Player_OnPlayerDeath;
+        EnemyManager.OnLastEnemyDestroyed += EnemyManager_OnLastEnemyDestroyed;
     }
 
     private void Update()
@@ -77,9 +82,15 @@ public class StateManager : MonoBehaviour
         return waveSettingsSO.difficultyModifier + excessWaves * endGameDifficultyRamp;
     }
 
-    private void InitWaveCountdown()
+    private void InitWaveCountdown(bool newWave)
     {
-        WaveCountdownVisual.Instance.Initialize(currentWave, false);
+        if (newWave)
+        {
+            currentWave++;
+            bossRoundText.gameObject.SetActive(false);
+        }
+
+        WaveCountdownVisual.Instance.Initialize(currentWave, newWave);
     }
 
     private void WaveCountdown_OnCountdownEnded()
@@ -112,7 +123,7 @@ public class StateManager : MonoBehaviour
 
     private void InitBossRound()
     {
-        Debug.Log("Boss round!");
+        bossRoundText.gameObject.SetActive(true);
     }
 
     private void InitGameOver()
@@ -128,7 +139,13 @@ public class StateManager : MonoBehaviour
 
     private void GameStartPrompt_OnGameStarted()
     {
-        InitWaveCountdown();
+        InitWaveCountdown(false);
+        SetGameState(GameState.WaveCountdown);
+    }
+
+    private void EnemyManager_OnLastEnemyDestroyed()
+    {
+        InitWaveCountdown(true);
         SetGameState(GameState.WaveCountdown);
     }
 

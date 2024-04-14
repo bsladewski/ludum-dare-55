@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Basic Enemy
   m_EditorClassIdentifier: 
   maxTerms: 2
-  maxSum: 40
+  maxSum: 20
   pointValue: 2
   moveSpeed: 2
   enemyPrefab: {fileID: 7320315072450079655, guid: 956ad869d1fd6134ea8aa76369040d19,

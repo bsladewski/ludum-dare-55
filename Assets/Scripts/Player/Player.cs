@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI solutionText;
 
+    [SerializeField]
+    private GameObject solutionHelpText;
+
     private PlayerControls playerControls;
 
     private int solution = 0;
@@ -75,12 +78,17 @@ public class Player : MonoBehaviour
 
     private void OnNumberInput(int number)
     {
-        if (!PlayerInputAllowed()) return;
+        if (!PlayerInputAllowed())
+        {
+            solution = 0;
+            UpdateSolution();
+            return;
+        }
 
         int newSolution = solution * 10 + number;
-        if (newSolution > 999)
+        if (newSolution > 9999)
         {
-            Debug.Log("Solution too large!");
+            solutionHelpText.SetActive(true);
             return;
         }
 
@@ -94,6 +102,7 @@ public class Player : MonoBehaviour
 
         if (solution > 0)
         {
+            solutionHelpText.SetActive(false);
             OnSolutionEntered?.Invoke(solution);
         }
 

@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class Enemy : MonoBehaviour
 {
     public static Action OnEnemyAttackPlayer;
+
+    public static Action<Enemy> OnAnyEnemyDestroyed;
 
     [field: SerializeField]
     public EnemySO enemySO { get; private set; }
@@ -12,9 +15,15 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float damageGracePeriod = 0.5f;
 
+    [SerializeField]
+    private TextMeshPro problemText;
+
+    [SerializeField]
+    private GameObject destroyedEffectPrefab;
+
     private bool isInGracePeriod;
 
-    private float difficultyModifier;
+    private float difficultyModifier = 1f;
 
     private int solution;
 
@@ -61,15 +70,38 @@ public class Enemy : MonoBehaviour
         return solution;
     }
 
+    public void DestroyEnemy()
+    {
+        Instantiate(destroyedEffectPrefab, transform.position, Quaternion.identity);
+        OnAnyEnemyDestroyed?.Invoke(this);
+        Destroy(gameObject);
+    }
+
     private void GenerateProblem()
     {
-        solution = 0; // TODO:
+        int termCount = UnityEngine.Random.Range(2, enemySO.maxTerms + 1);
+        int maxTermValue = enemySO.maxSum / termCount;
+
+        int[] terms = new int[termCount];
+        solution = 0;
+        for (int i = 0; i < terms.Length; i++)
+        {
+            int termValue = UnityEngine.Random.Range(1, maxTermValue + 1);
+            terms[i] = termValue;
+            solution += termValue;
+        }
+
+        problemText.text = terms[0].ToString();
+        for (int i = 1; i < terms.Length; i++)
+        {
+            problemText.text += "+" + terms[i].ToString();
+        }
     }
 
     private IEnumerator Attack()
     {
         yield return new WaitForSeconds(damageGracePeriod);
         OnEnemyAttackPlayer?.Invoke();
-        Destroy(gameObject);
+        DestroyEnemy();
     }
 }

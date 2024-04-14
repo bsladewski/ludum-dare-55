@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Swarmer
   m_EditorClassIdentifier: 
   maxTerms: 2
-  maxSum: 16
+  maxSum: 12
   pointValue: 1
   moveSpeed: 4
   enemyPrefab: {fileID: 5039845458681551565, guid: 466aad7c0b3547b4787191a8c324c0d6,
