@@ -2,10 +2,39 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private float spawnTimer = 2f;
+    public static EnemySpawner Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("Singleton EnemySpawner already instantiated!");
+        }
+
+        Instance = this;
+    }
+
+    [SerializeField]
+    private float spawnRadius = 10f;
+
+    private static readonly float SPAWN_TIMER_GRACE_PERIOD = 2f;
+
+    private float spawnTimer = SPAWN_TIMER_GRACE_PERIOD;
+
+    private float pointDeficit = 0f;
+
+    private void Start()
+    {
+        StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
+    }
 
     private void Update()
     {
+        if (StateManager.Instance.GetGameState() != StateManager.GameState.WaveInProgress)
+        {
+            return;
+        }
+
         if (spawnTimer < 0f)
         {
             SpawnEnemy();
@@ -17,8 +46,32 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    public void ResetEnemySpawner()
+    {
+        spawnTimer = SPAWN_TIMER_GRACE_PERIOD;
+    }
+
     private void SpawnEnemy()
     {
-        // TODO:
+        WaveSettingsSO waveSettings = StateManager.Instance.GetWaveSettings();
+        EnemySO enemy = waveSettings.GetEnemySO();
+        SpawnEnemy(enemy.enemyPrefab);
+    }
+
+    private void StateManager_OnGameStateChanged(StateManager.GameState gameState)
+    {
+        if (gameState != StateManager.GameState.BossRound)
+        {
+            return;
+        }
+
+        WaveSettingsSO waveSettings = StateManager.Instance.GetWaveSettings();
+        SpawnEnemy(waveSettings.GetBossEnemySO().enemyPrefab);
+    }
+
+    private void SpawnEnemy(Enemy enemyPrefab)
+    {
+        Vector2 spawnPoint = Random.insideUnitCircle.normalized * spawnRadius;
+        Instantiate(enemyPrefab, new Vector3(spawnPoint.x, 0f, spawnPoint.y), Quaternion.identity);
     }
 }

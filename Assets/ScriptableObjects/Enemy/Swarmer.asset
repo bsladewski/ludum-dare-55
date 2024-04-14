@@ -16,4 +16,5 @@ MonoBehaviour:
   maxSum: 16
   pointValue: 1
   moveSpeed: 4
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 5039845458681551565, guid: 466aad7c0b3547b4787191a8c324c0d6,
+    type: 3}

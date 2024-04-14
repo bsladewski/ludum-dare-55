@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12bf15b5b7f809e46b2b894ee4852a43, type: 3}
-  m_Name: Basic
+  m_Name: Basic Enemy
   m_EditorClassIdentifier: 
   maxTerms: 2
   maxSum: 40
   pointValue: 2
   moveSpeed: 2
-  mesh: {fileID: 0}
+  enemyPrefab: {fileID: 7320315072450079655, guid: 956ad869d1fd6134ea8aa76369040d19,
+    type: 3}

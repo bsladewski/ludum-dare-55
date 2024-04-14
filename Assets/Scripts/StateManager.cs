@@ -87,6 +87,7 @@ public class StateManager : MonoBehaviour
     private void InitWaveInProgress()
     {
         waveTimer = waveDuration;
+        EnemySpawner.Instance.ResetEnemySpawner();
         WaveTimer.Instance.UpdateTimer(waveTimer);
         WaveTimer.Instance.Enable();
     }

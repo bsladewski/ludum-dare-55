@@ -4,6 +4,10 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
+
+    public static Action OnPlayerDeath;
+
     public static Action<int> OnSolutionEntered;
 
     [SerializeField]
@@ -23,6 +27,13 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Debug.LogError("Singleton Player already exists!");
+        }
+
+        Instance = this;
+
         playerControls = new PlayerControls();
 
         playerControls.Player._0.started += (_) => OnNumberInput(0);
@@ -114,6 +125,10 @@ public class Player : MonoBehaviour
     {
         currentHealth -= 1;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
+        if (currentHealth <= 0)
+        {
+            OnPlayerDeath?.Invoke();
+        }
     }
 
     private void StateManager_OnGameStateChanged(StateManager.GameState gameState)
