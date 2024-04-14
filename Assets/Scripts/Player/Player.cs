@@ -25,9 +25,22 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject solutionHelpText;
 
+    [SerializeField]
+    private PlayerAttack playerAttackPrefab;
+
+    [SerializeField]
+    private GameObject playerHitEffectPrefab;
+
+    [SerializeField]
+    private Transform lightningSpawnPoint;
+
     private PlayerControls playerControls;
 
     private int solution = 0;
+
+    private float rotationCooldown = 0.2f;
+
+    private float rotationTimer;
 
     private void Awake()
     {
@@ -45,6 +58,7 @@ public class Player : MonoBehaviour
     {
         UpdateSolution();
         StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
+        EnemyManager.Instance.OnEnemyDestroyed += EnemyManager_OnEnemyDestroyed;
 
         currentHealth = maxHealth;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
@@ -97,6 +111,14 @@ public class Player : MonoBehaviour
 
         playerControls.Player.Enter.started -= OnEnterPressed;
         playerControls.Player.Backspace.started -= OnBackspacePressed;
+    }
+
+    private void Update()
+    {
+        if (rotationTimer > 0f)
+        {
+            rotationTimer -= Time.deltaTime;
+        }
     }
 
     private bool PlayerInputAllowed()
@@ -162,6 +184,7 @@ public class Player : MonoBehaviour
 
     public void HitPlayer()
     {
+        Instantiate(playerHitEffectPrefab, transform.position, Quaternion.identity);
         currentHealth -= 1;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
         if (currentHealth <= 0)
@@ -182,5 +205,20 @@ public class Player : MonoBehaviour
                 playerHealth.gameObject.SetActive(false);
                 break;
         }
+    }
+
+    private void EnemyManager_OnEnemyDestroyed(Enemy enemy)
+    {
+        if (rotationTimer <= 0f)
+        {
+            transform.forward = (enemy.transform.position - transform.position).normalized;
+            rotationTimer = rotationCooldown;
+        }
+
+        PlayerAttack playerAttack = Instantiate(playerAttackPrefab);
+        playerAttack.Initialize(
+            lightningSpawnPoint.position,
+            enemy.transform.position + Vector3.up
+        );
     }
 }
