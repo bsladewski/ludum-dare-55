@@ -11,6 +11,9 @@ public class StateManager : MonoBehaviour
     private GameStartPrompt gameStartPrompt;
 
     [SerializeField]
+    private GameOverPrompt gameOverPrompt;
+
+    [SerializeField]
     private WaveSettingsSO[] waveSettings;
 
     [SerializeField]
@@ -114,7 +117,7 @@ public class StateManager : MonoBehaviour
 
     private void InitGameOver()
     {
-        Debug.Log("Game Over!");
+        gameOverPrompt.gameObject.SetActive(true);
     }
 
     private void Player_OnPlayerDeath()

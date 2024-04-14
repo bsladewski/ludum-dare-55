@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameOverPrompt : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static GameOverPrompt Instance;
+
+    private void Awake()
     {
-        
+        if (Instance != null)
+        {
+            Debug.LogError("Singleton GameOverPrompt already exists!");
+        }
+
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Done()
     {
-        
+        SceneManager.LoadScene(0);
     }
 }
