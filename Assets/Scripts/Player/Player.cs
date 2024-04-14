@@ -266,7 +266,7 @@ public class Player : MonoBehaviour
 
     private void EnemyManager_OnMiss()
     {
-        Instantiate(fizzleTextPrefab, transform.position + Vector3.up * 5f, Quaternion.identity);
+        // Instantiate(fizzleTextPrefab, transform.position + Vector3.up * 5f, Quaternion.identity);
         PlayAttackAudioClip();
         CameraShakeManager.Instance.Shake(1.5f, 0.5f);
     }
