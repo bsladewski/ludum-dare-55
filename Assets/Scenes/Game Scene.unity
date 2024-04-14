@@ -3340,6 +3340,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c23e7901c0aa9834794ae10790dce899, type: 3}
   attackAudioClips:
   - {fileID: 8300000, guid: 8000e66625a2fa5458245bcb377925e3, type: 3}
+  fizzleTextPrefab: {fileID: 3997492058837278589, guid: a88c8e10923c50642a108c05fd162c38,
+    type: 3}
 --- !u!4 &1313416719
 Transform:
   m_ObjectHideFlags: 0

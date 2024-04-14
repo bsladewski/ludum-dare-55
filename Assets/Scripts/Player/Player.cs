@@ -46,6 +46,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioClip[] attackAudioClips;
 
+    [SerializeField]
+    private GameObject fizzleTextPrefab;
+
     private PlayerControls playerControls;
 
     private int solution = 0;
@@ -73,6 +76,7 @@ public class Player : MonoBehaviour
         UpdateSolution();
         StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
         EnemyManager.Instance.OnEnemyDestroyed += EnemyManager_OnEnemyDestroyed;
+        EnemyManager.Instance.OnMiss += EnemyManager_OnMiss;
 
         currentHealth = maxHealth;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
@@ -258,5 +262,12 @@ public class Player : MonoBehaviour
     {
         audioSource.pitch = UnityEngine.Random.Range(0.5f, 1.5f);
         audioSource.PlayOneShot(attackAudioClips[UnityEngine.Random.Range(0, attackAudioClips.Length)]);
+    }
+
+    private void EnemyManager_OnMiss()
+    {
+        Instantiate(fizzleTextPrefab, transform.position + Vector3.up * 5f, Quaternion.identity);
+        PlayAttackAudioClip();
+        CameraShakeManager.Instance.Shake(1.5f, 0.5f);
     }
 }
