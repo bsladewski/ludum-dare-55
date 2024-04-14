@@ -12,9 +12,6 @@ public class StateManager : MonoBehaviour
     private GameStartPrompt gameStartPrompt;
 
     [SerializeField]
-    private GameOverPrompt gameOverPrompt;
-
-    [SerializeField]
     private WaveSettingsSO[] waveSettings;
 
     [SerializeField]
@@ -49,7 +46,7 @@ public class StateManager : MonoBehaviour
         GameStartPrompt.Instance.OnGameStarted += GameStartPrompt_OnGameStarted;
         WaveCountdownVisual.Instance.OnCountdownEnded += WaveCountdown_OnCountdownEnded;
         Player.Instance.OnPlayerDeath += Player_OnPlayerDeath;
-        EnemyManager.OnLastEnemyDestroyed += EnemyManager_OnLastEnemyDestroyed;
+        EnemyManager.Instance.OnLastEnemyDestroyed += EnemyManager_OnLastEnemyDestroyed;
     }
 
     private void Update()
@@ -126,14 +123,8 @@ public class StateManager : MonoBehaviour
         bossRoundText.gameObject.SetActive(true);
     }
 
-    private void InitGameOver()
-    {
-        gameOverPrompt.gameObject.SetActive(true);
-    }
-
     private void Player_OnPlayerDeath()
     {
-        InitGameOver();
         SetGameState(GameState.GameOver);
     }
 

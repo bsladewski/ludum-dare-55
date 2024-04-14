@@ -1,14 +1,9 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using TMPro;
 
 public class Enemy : MonoBehaviour
 {
-    public static Action OnEnemyAttackPlayer;
-
-    public static Action<Enemy> OnAnyEnemyDestroyed;
-
     [field: SerializeField]
     public EnemySO enemySO { get; private set; }
 
@@ -28,6 +23,8 @@ public class Enemy : MonoBehaviour
     private int solution;
 
     private Vector3 target;
+
+    private bool hitPlayer;
 
     private void Awake()
     {
@@ -73,8 +70,13 @@ public class Enemy : MonoBehaviour
     public void DestroyEnemy()
     {
         Instantiate(destroyedEffectPrefab, transform.position, Quaternion.identity);
-        OnAnyEnemyDestroyed?.Invoke(this);
+        EnemyManager.Instance.EnemyDestroyed(this);
         Destroy(gameObject);
+    }
+
+    public bool GetHitPlayer()
+    {
+        return hitPlayer;
     }
 
     private void GenerateProblem()
@@ -101,7 +103,8 @@ public class Enemy : MonoBehaviour
     private IEnumerator Attack()
     {
         yield return new WaitForSeconds(damageGracePeriod);
-        OnEnemyAttackPlayer?.Invoke();
+        hitPlayer = true;
+        Player.Instance.HitPlayer();
         DestroyEnemy();
     }
 }

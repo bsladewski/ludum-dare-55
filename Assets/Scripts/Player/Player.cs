@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class Player : MonoBehaviour
 
     public Action OnPlayerDeath;
 
-    public static Action<int> OnSolutionEntered;
+    public Action<int> OnSolutionEntered;
 
     [SerializeField]
     private int maxHealth = 3;
@@ -38,35 +39,64 @@ public class Player : MonoBehaviour
         Instance = this;
 
         playerControls = new PlayerControls();
-
-        playerControls.Player._0.started += (_) => OnNumberInput(0);
-        playerControls.Player._1.started += (_) => OnNumberInput(1);
-        playerControls.Player._2.started += (_) => OnNumberInput(2);
-        playerControls.Player._3.started += (_) => OnNumberInput(3);
-        playerControls.Player._4.started += (_) => OnNumberInput(4);
-        playerControls.Player._5.started += (_) => OnNumberInput(5);
-        playerControls.Player._6.started += (_) => OnNumberInput(6);
-        playerControls.Player._7.started += (_) => OnNumberInput(7);
-        playerControls.Player._8.started += (_) => OnNumberInput(8);
-        playerControls.Player._9.started += (_) => OnNumberInput(9);
-
-        playerControls.Player.Enter.started += (_) => OnEnterPressed();
-        playerControls.Player.Backspace.started += (_) => OnBackspacePressed();
     }
 
     private void Start()
     {
         UpdateSolution();
-        Enemy.OnEnemyAttackPlayer += Enemy_OnEnemyAttackPlayer;
         StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
 
         currentHealth = maxHealth;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
     }
 
+    private void _0(InputAction.CallbackContext ctx) { OnNumberInput(0); }
+    private void _1(InputAction.CallbackContext ctx) { OnNumberInput(1); }
+    private void _2(InputAction.CallbackContext ctx) { OnNumberInput(2); }
+    private void _3(InputAction.CallbackContext ctx) { OnNumberInput(3); }
+    private void _4(InputAction.CallbackContext ctx) { OnNumberInput(4); }
+    private void _5(InputAction.CallbackContext ctx) { OnNumberInput(5); }
+    private void _6(InputAction.CallbackContext ctx) { OnNumberInput(6); }
+    private void _7(InputAction.CallbackContext ctx) { OnNumberInput(7); }
+    private void _8(InputAction.CallbackContext ctx) { OnNumberInput(8); }
+    private void _9(InputAction.CallbackContext ctx) { OnNumberInput(9); }
+
     private void OnEnable()
     {
         playerControls.Enable();
+
+        playerControls.Player._0.started += _0;
+        playerControls.Player._1.started += _1;
+        playerControls.Player._2.started += _2;
+        playerControls.Player._3.started += _3;
+        playerControls.Player._4.started += _4;
+        playerControls.Player._5.started += _5;
+        playerControls.Player._6.started += _6;
+        playerControls.Player._7.started += _7;
+        playerControls.Player._8.started += _8;
+        playerControls.Player._9.started += _9;
+
+        playerControls.Player.Enter.started += OnEnterPressed;
+        playerControls.Player.Backspace.started += OnBackspacePressed;
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Disable();
+
+        playerControls.Player._0.started -= _0;
+        playerControls.Player._1.started -= _1;
+        playerControls.Player._2.started -= _2;
+        playerControls.Player._3.started -= _3;
+        playerControls.Player._4.started -= _4;
+        playerControls.Player._5.started -= _5;
+        playerControls.Player._6.started -= _6;
+        playerControls.Player._7.started -= _7;
+        playerControls.Player._8.started -= _8;
+        playerControls.Player._9.started -= _9;
+
+        playerControls.Player.Enter.started -= OnEnterPressed;
+        playerControls.Player.Backspace.started -= OnBackspacePressed;
     }
 
     private bool PlayerInputAllowed()
@@ -96,7 +126,7 @@ public class Player : MonoBehaviour
         UpdateSolution();
     }
 
-    private void OnEnterPressed()
+    private void OnEnterPressed(InputAction.CallbackContext ctx)
     {
         if (!PlayerInputAllowed()) return;
 
@@ -110,7 +140,7 @@ public class Player : MonoBehaviour
         UpdateSolution();
     }
 
-    private void OnBackspacePressed()
+    private void OnBackspacePressed(InputAction.CallbackContext ctx)
     {
         if (!PlayerInputAllowed()) return;
 
@@ -130,7 +160,7 @@ public class Player : MonoBehaviour
         solutionText.text = solution.ToString();
     }
 
-    private void Enemy_OnEnemyAttackPlayer()
+    public void HitPlayer()
     {
         currentHealth -= 1;
         playerHealth.UpdateHealth(maxHealth, currentHealth);

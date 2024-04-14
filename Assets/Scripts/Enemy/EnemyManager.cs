@@ -3,20 +3,27 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static Action OnLastEnemyDestroyed;
-
-    public static Action<Enemy> OnEnemyHit;
-
-    public static Action OnMiss;
+    public static EnemyManager Instance { get; private set; }
 
     private void Awake()
     {
-        Player.OnSolutionEntered += Player_OnSolutionEntered;
+        if (Instance != null)
+        {
+            Debug.LogError("Singleton EnemyManager already instantiated!");
+        }
+
+        Instance = this;
     }
+
+    public Action OnLastEnemyDestroyed;
+
+    public Action<Enemy> OnEnemyDestroyed;
+
+    public Action OnMiss;
 
     private void Start()
     {
-        Enemy.OnAnyEnemyDestroyed += Enemy_OnAnyEnemyDestroyed;
+        Player.Instance.OnSolutionEntered += Player_OnSolutionEntered;
     }
 
     private void Player_OnSolutionEntered(int solution)
@@ -27,7 +34,7 @@ public class EnemyManager : MonoBehaviour
             if (enemy.GetSolution() == solution)
             {
                 hits++;
-                OnEnemyHit?.Invoke(enemy);
+                OnEnemyDestroyed?.Invoke(enemy);
                 enemy.DestroyEnemy();
             }
         }
@@ -38,7 +45,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private void Enemy_OnAnyEnemyDestroyed(Enemy enemy)
+    public void EnemyDestroyed(Enemy enemy)
     {
         if (StateManager.Instance.GetGameState() != StateManager.GameState.BossRound)
         {

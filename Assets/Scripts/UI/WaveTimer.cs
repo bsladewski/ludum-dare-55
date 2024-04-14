@@ -18,7 +18,7 @@ public class WaveTimer : MonoBehaviour
     private void Start()
     {
         StateManager.Instance.OnGameStateChanged += StateManager_OnGameStateChanged;
-        Player.OnSolutionEntered += Player_OnSolutionEntered;
+        Player.Instance.OnSolutionEntered += Player_OnSolutionEntered;
     }
 
     [SerializeField]
