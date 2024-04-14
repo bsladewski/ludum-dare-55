@@ -11,5 +11,7 @@ public class EnemySO : ScriptableObject
 
     public float moveSpeed = 2f;
 
+    public float stopDistance = 1.5f;
+
     public Enemy enemyPrefab;
 }

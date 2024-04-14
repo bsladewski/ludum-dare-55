@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b1a588fb17cd104fbab79c595665224, type: 3}
   m_Name: Wave 3
   m_EditorClassIdentifier: 
-  spawnRate: 2
+  spawnRate: 1.5
   difficultyModifier: 1
   waveEndBoss: {fileID: 11400000, guid: da41460d524ed8149b74fb21adce4d00, type: 2}
   spawnWeights:
   - enemySO: {fileID: 11400000, guid: 73dc8bfce4d796042a48790fe56fa970, type: 2}
-    weight: 2
-  - enemySO: {fileID: 11400000, guid: 5de0618d760dbb049bdedfb0c3169088, type: 2}
-    weight: 4
-  - enemySO: {fileID: 11400000, guid: da41460d524ed8149b74fb21adce4d00, type: 2}
     weight: 1
+  - enemySO: {fileID: 11400000, guid: 5de0618d760dbb049bdedfb0c3169088, type: 2}
+    weight: 8

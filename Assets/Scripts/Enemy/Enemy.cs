@@ -42,10 +42,11 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(transform.position, target) > 1.5f && !isInGracePeriod)
+        if (Vector3.Distance(transform.position, target) > enemySO.stopDistance && !isInGracePeriod)
         {
             Vector3 moveDir = (target - transform.position).normalized;
-            transform.Translate(moveDir * enemySO.moveSpeed * Time.deltaTime);
+            transform.forward = moveDir;
+            transform.position += moveDir * enemySO.moveSpeed * Time.deltaTime;
         }
         else if (!isInGracePeriod)
         {
