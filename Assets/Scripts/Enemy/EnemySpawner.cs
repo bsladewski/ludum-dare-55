@@ -23,6 +23,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private GameObject spawnEffectPrefab;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip[] spawnAudioClips;
+
     private static readonly float SPAWN_TIMER_GRACE_PERIOD = 2f;
 
     private float spawnTimer = SPAWN_TIMER_GRACE_PERIOD;
@@ -79,5 +85,11 @@ public class EnemySpawner : MonoBehaviour
         Vector2 spawnPoint = Random.insideUnitCircle.normalized * spawnDistance;
         Instantiate(spawnEffectPrefab, new Vector3(spawnPoint.x, 0f, spawnPoint.y), Quaternion.identity);
         Instantiate(enemyPrefab, new Vector3(spawnPoint.x, 0f, spawnPoint.y), Quaternion.identity);
+        PlaySpawnAudioClip();
+    }
+
+    private void PlaySpawnAudioClip()
+    {
+        audioSource.PlayOneShot(spawnAudioClips[UnityEngine.Random.Range(0, spawnAudioClips.Length)]);
     }
 }

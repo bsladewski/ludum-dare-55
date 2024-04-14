@@ -37,6 +37,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Transform playerVisual;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip[] hitAudioClips;
+
+    [SerializeField]
+    private AudioClip[] attackAudioClips;
+
     private PlayerControls playerControls;
 
     private int solution = 0;
@@ -197,6 +206,7 @@ public class Player : MonoBehaviour
 
     public void HitPlayer()
     {
+        PlayHitAudioClip();
         CameraShakeManager.Instance.Shake(2.5f, 0.5f);
         Instantiate(playerHitEffectPrefab, transform.position, Quaternion.identity);
         currentHealth -= 1;
@@ -227,6 +237,7 @@ public class Player : MonoBehaviour
         {
             transform.forward = (enemy.transform.position - transform.position).normalized;
             rotationTimer = rotationCooldown;
+            PlayAttackAudioClip();
         }
 
         PlayerAttack playerAttack = Instantiate(playerAttackPrefab);
@@ -235,5 +246,15 @@ public class Player : MonoBehaviour
             enemy.transform.position + Vector3.up
         );
         CameraShakeManager.Instance.Shake(1.5f, 0.5f);
+    }
+
+    private void PlayHitAudioClip()
+    {
+        audioSource.PlayOneShot(hitAudioClips[UnityEngine.Random.Range(0, hitAudioClips.Length)]);
+    }
+
+    private void PlayAttackAudioClip()
+    {
+        audioSource.PlayOneShot(attackAudioClips[UnityEngine.Random.Range(0, attackAudioClips.Length)]);
     }
 }
