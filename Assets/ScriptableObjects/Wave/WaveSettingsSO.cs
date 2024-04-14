@@ -5,7 +5,7 @@ public class WaveSettingsSO : ScriptableObject
 {
     public float spawnRate = 1f;
 
-    public float difficultyModifier = 1f;
+    public float difficultyModifier = 0f;
 
     public EnemySO waveEndBoss;
 

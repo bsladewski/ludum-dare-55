@@ -250,11 +250,13 @@ public class Player : MonoBehaviour
 
     private void PlayHitAudioClip()
     {
+        audioSource.pitch = UnityEngine.Random.Range(0.5f, 1.5f);
         audioSource.PlayOneShot(hitAudioClips[UnityEngine.Random.Range(0, hitAudioClips.Length)]);
     }
 
     private void PlayAttackAudioClip()
     {
+        audioSource.pitch = UnityEngine.Random.Range(0.5f, 1.5f);
         audioSource.PlayOneShot(attackAudioClips[UnityEngine.Random.Range(0, attackAudioClips.Length)]);
     }
 }

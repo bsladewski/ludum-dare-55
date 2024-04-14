@@ -18,7 +18,7 @@ public class StateManager : MonoBehaviour
     private int currentWave = 1;
 
     [SerializeField]
-    private float endGameDifficultyRamp = 1f;
+    private float endGameDifficultyRamp = 20f;
 
     [SerializeField]
     private float waveDuration = 60f;

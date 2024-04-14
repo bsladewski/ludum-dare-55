@@ -90,6 +90,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void PlaySpawnAudioClip()
     {
+        audioSource.pitch = UnityEngine.Random.Range(0.5f, 1.5f);
         audioSource.PlayOneShot(spawnAudioClips[UnityEngine.Random.Range(0, spawnAudioClips.Length)]);
     }
 }

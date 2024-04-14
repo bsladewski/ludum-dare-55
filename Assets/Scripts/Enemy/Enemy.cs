@@ -18,8 +18,6 @@ public class Enemy : MonoBehaviour
 
     private bool isInGracePeriod;
 
-    private float difficultyModifier = 1f;
-
     private int solution;
 
     private Vector3 target;
@@ -56,12 +54,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void SetDifficultyModifier(float difficultyModifier)
-    {
-        this.difficultyModifier = difficultyModifier;
-        GenerateProblem();
-    }
-
     public int GetSolution()
     {
         return solution;
@@ -82,7 +74,8 @@ public class Enemy : MonoBehaviour
     private void GenerateProblem()
     {
         int termCount = UnityEngine.Random.Range(2, enemySO.maxTerms + 1);
-        int maxTermValue = enemySO.maxSum / termCount;
+        int maxSum = Mathf.Min(9999, enemySO.maxSum + (int)StateManager.Instance.GetDifficultyModifier());
+        int maxTermValue = maxSum / termCount;
 
         int[] terms = new int[termCount];
         solution = 0;

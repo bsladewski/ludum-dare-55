@@ -1868,8 +1868,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5f191d0dc36d2604c9fbbcd79c24388d, type: 2}
   - {fileID: 11400000, guid: d8f049b1e82e09a479eb12590f5efc63, type: 2}
   currentWave: 1
-  endGameDifficultyRamp: 1
-  waveDuration: 10
+  endGameDifficultyRamp: 20
+  waveDuration: 60
   bossRoundText: {fileID: 1370251302}
 --- !u!114 &837433475
 MonoBehaviour:
