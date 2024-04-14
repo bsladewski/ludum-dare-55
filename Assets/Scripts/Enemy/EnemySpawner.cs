@@ -20,6 +20,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float spawnFuzzFactor = 2f;
 
+    [SerializeField]
+    private GameObject spawnEffectPrefab;
+
     private static readonly float SPAWN_TIMER_GRACE_PERIOD = 2f;
 
     private float spawnTimer = SPAWN_TIMER_GRACE_PERIOD;
@@ -74,6 +77,7 @@ public class EnemySpawner : MonoBehaviour
     {
         float spawnDistance = spawnRadius + (Random.value * spawnFuzzFactor);
         Vector2 spawnPoint = Random.insideUnitCircle.normalized * spawnDistance;
+        Instantiate(spawnEffectPrefab, new Vector3(spawnPoint.x, 0f, spawnPoint.y), Quaternion.identity);
         Instantiate(enemyPrefab, new Vector3(spawnPoint.x, 0f, spawnPoint.y), Quaternion.identity);
     }
 }

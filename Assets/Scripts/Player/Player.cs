@@ -34,6 +34,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Transform lightningSpawnPoint;
 
+    [SerializeField]
+    private Transform playerVisual;
+
     private PlayerControls playerControls;
 
     private int solution = 0;
@@ -41,6 +44,8 @@ public class Player : MonoBehaviour
     private float rotationCooldown = 0.2f;
 
     private float rotationTimer;
+
+    private Vector3 startLocalScale;
 
     private void Awake()
     {
@@ -62,6 +67,7 @@ public class Player : MonoBehaviour
 
         currentHealth = maxHealth;
         playerHealth.UpdateHealth(maxHealth, currentHealth);
+        startLocalScale = playerVisual.localScale;
     }
 
     private void _0(InputAction.CallbackContext ctx) { OnNumberInput(0); }
@@ -119,6 +125,13 @@ public class Player : MonoBehaviour
         {
             rotationTimer -= Time.deltaTime;
         }
+
+        float squash = Mathf.Sin(Time.time) * 0.2f;
+        playerVisual.localScale = new Vector3(
+            startLocalScale.x - squash / 2f,
+            startLocalScale.y + squash,
+            startLocalScale.z - squash / 2f
+        );
     }
 
     private bool PlayerInputAllowed()
